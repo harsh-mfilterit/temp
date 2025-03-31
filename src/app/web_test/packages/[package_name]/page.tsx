@@ -18,12 +18,6 @@ import {
 
 const queryClient = new QueryClient();
 
-export function generateStaticParams() {
-  return [
-    { package_name: 'default' }
-  ];
-}
-
 export default function Page() {
   return (
     <QueryClientProvider client={queryClient}>

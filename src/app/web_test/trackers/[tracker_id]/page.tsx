@@ -14,12 +14,6 @@ import { Input } from "@/components/ui/input";
 
 const queryClient = new QueryClient();
 
-export function generateStaticParams() {
-  return [
-    { tracker_id: 'default' }
-  ];
-}
-
 export default function Page() {
   return (
     <QueryClientProvider client={queryClient}>
