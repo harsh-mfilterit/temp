@@ -46,7 +46,7 @@ function CreateTracker() {
     const formData = formRef?.current?.values;
     const fields = { ...values, ...formData };
     console.log(fields);
-    // createTracker(fields);
+    createTracker(fields);
   }
 
   return (

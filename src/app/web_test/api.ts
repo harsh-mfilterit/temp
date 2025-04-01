@@ -42,6 +42,31 @@ export class Toast {
 function parseJSON(response: Response) {
   return response.json();
 }
+function flattenObject(obj) {
+  const flattened = {};
+  
+  function recurse(current, key, parentKey = '') {
+      if (typeof current === 'object' && current !== null && !Array.isArray(current)) {
+          const keys = Object.keys(current);
+          if (keys.length === 1) {
+              flattened[parentKey] = keys[0];
+              recurse(current[keys[0]], keys[0], keys[0]);
+          } else {
+              for (const [k, v] of Object.entries(current)) {
+                  recurse(v, k, k);
+              }
+          }
+      } else {
+          flattened[key] = current;
+      }
+  }
+  
+  for (const [key, value] of Object.entries(obj)) {
+      recurse(value, key, key);
+  }
+  
+  return flattened;
+}
 
 const dummyCode = `<script>
 (function(m, f, i, l, t, e, r) {
@@ -83,6 +108,8 @@ const WEB_TEST_APIS = {
     return data.data.data;
   },
   async createTracker(payload: any): Promise<any> {
+    payload = flattenObject(payload);
+    console.log(payload)
     let data: any = await axios.post(
       BASE_URL + "config_dashboard/trackers/create",
       payload
