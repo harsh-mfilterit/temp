@@ -28,16 +28,15 @@ function TrackerConfig() {
   const {
     data: trackerFields,
     isLoading,
-    isFetching,
     refetch,
+    isFetching
   } = useGetTrackerConfig(trackerId);
   const {
     mutateAsync,
     data: updateRes,
     isLoading: resLoading,
   } = useUpdateTrackerConfig();
-  //const formRef: any = useRef();
-  const formRef = useRef<HTMLFormElement>(null);
+  const formRef: any = useRef();
   // Dummy code to display on the right side
   function handleSubmit() {
     const formData = formRef?.current?.values;

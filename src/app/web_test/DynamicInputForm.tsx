@@ -105,7 +105,7 @@ const DynamicInputForm = React.memo(
                 schema={schema[dropdown[label]]}
                 formValues={values}
                 label={dropdown[label]}
-                saveAllOptions
+                saveAllOptions={saveAllOptions}
                 cb={saveCurrentValues}
               />
             )}
@@ -207,7 +207,7 @@ const DynamicInputForm = React.memo(
                     schema={field}
                     label={key}
                     formValues={values}
-                    saveAllOptions
+                    saveAllOptions={saveAllOptions}
                     cb={saveCurrentValues}
                   />
                 );
