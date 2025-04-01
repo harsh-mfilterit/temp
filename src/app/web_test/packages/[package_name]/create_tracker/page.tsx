@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import CodeBlock from "../../../CodeBlock";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import TRACKER_DATA from "./create_tracker";
 import {
   Select,
   SelectContent,
@@ -14,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCreateTracker, useGetPlatforms } from "../../../api";
+import { useCreateTracker, useGetNewTrackerSchema } from "../../../api";
 import { Button } from "@/components/ui/button";
 import Loader from "../../../Loader";
 import DynamicInputForm from "../../../DynamicInputForm";
@@ -35,7 +34,7 @@ function CreateTracker() {
     data: newTracker,
     isLoading: ctl,
   } = useCreateTracker();
-  // const { data: platforms, isLoading } = useGetPlatforms();
+  const { data: trackerSchema, isLoading } = useGetNewTrackerSchema();
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState({
     package_name: packageName,
@@ -46,7 +45,7 @@ function CreateTracker() {
     event.preventDefault();
     const formData = formRef?.current?.values;
     const fields = { ...values, ...formData };
-    console.log(fields)
+    console.log(fields);
     // createTracker(fields);
   }
 
@@ -58,34 +57,39 @@ function CreateTracker() {
         </h2>
       </div>
       <div className="flex flex-col lg:flex-row py-2 gap-x-4  rounded-xl mt-3 w-full">
-        <form
-          onSubmit={handleSubmit}
-          className=" bg-white dark:bg-gray-500 dark:text-white rounded-lg p-5 flex flex-col gap-y-4 lg:w-3/5"
-        >
-          <div className="flex items-center justify-between gap-x-5">
-            <Label className="w-4/6 capitalize text-md">package_name :</Label>
-            <Input
-              className="w-full dark:bg-gray-300 outline-none dark:border-white"
-              placeholder="Enter value"
-              value={values["package_name"]}
-              disabled
-            />
-          </div>
+        {trackerSchema ? (
+          <form
+            onSubmit={handleSubmit}
+            className=" bg-white dark:bg-gray-500 dark:text-white rounded-lg p-5 flex flex-col gap-y-4 lg:w-3/5"
+          >
+            <div className="flex items-center justify-between gap-x-5">
+              <Label className="w-4/6 capitalize text-md">package_name :</Label>
+              <Input
+                className="w-full dark:bg-gray-300 outline-none dark:border-white"
+                placeholder="Enter value"
+                value={values["package_name"]}
+                disabled
+              />
+            </div>
 
-          <DynamicInputForm
-            schema={TRACKER_DATA}
-            ref={formRef}
-            label="config"
-          />
-          <div className="flex gap-x-5">
-            <Button
-              type="submit"
-              className="w-full mt-8 dark:bg-gray-400 dark:text-white"
-            >
-              create tracker
-            </Button>
-          </div>
-        </form>
+            <DynamicInputForm
+              schema={trackerSchema}
+              ref={formRef}
+              label="config"
+            />
+
+            <div className="flex gap-x-5">
+              <Button
+                type="submit"
+                className="w-full mt-8 dark:bg-gray-400 dark:text-white"
+              >
+                create tracker
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <Loader />
+        )}
         <div className="flex flex-col"></div>
         <div className="sticky top-0 flex justify-center w-full bg-white dark:bg-gray-500 rounded-lg p-5 h-[75vh] ">
           {newTracker ? (
