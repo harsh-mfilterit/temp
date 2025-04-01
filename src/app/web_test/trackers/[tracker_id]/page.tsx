@@ -25,7 +25,12 @@ export default function Page() {
 function TrackerConfig() {
   const trackerId: any = useParams().tracker_id;
   const tracker_name: any = useParams().tracker_name;
-  const { data: trackerFields, isLoading } = useGetTrackerConfig(trackerId);
+  const {
+    data: trackerFields,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetTrackerConfig(trackerId);
   const {
     mutateAsync,
     data: updateRes,
@@ -42,7 +47,10 @@ function TrackerConfig() {
 
     if (isConfigUnchanged)
       return Toast.error({ description: "No changes detected" });
-    mutateAsync(payload).then(() => resetForm());
+    mutateAsync(payload).then(() => {
+      resetForm();
+      refetch();
+    });
   }
   function resetForm() {
     formRef?.current?.reset();
@@ -57,7 +65,7 @@ function TrackerConfig() {
       </div>
       <div className="flex flex-col lg:flex-row gap-y-4 py-2 lg:gap-x-4  rounded-xl mt-3 w-full">
         <div className="relative bg-white dark:bg-gray-500 rounded-lg p-5 flex flex-col gap-y-4  w-full">
-          {trackerFields ? (
+          {!isFetching && trackerFields ? (
             <>
               <div className="flex items-center justify-between gap-x-5">
                 <Label className="w-4/6 text-md dark:text-white capitalize">
@@ -106,4 +114,3 @@ function TrackerConfig() {
     </div>
   );
 }
-
